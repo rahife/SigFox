@@ -167,8 +167,12 @@ int SIGFOXClass::send(unsigned char mess[], int len, bool rx)
 
   if (!debugging) {
 #ifdef SIGFOX_SPI
+    spi_port->end();
     LowPower.attachInterruptWakeup(interrupt_pin, NULL, FALLING);
     LowPower.sleep(timeout);
+    spi_port->begin();
+    spi_port->setDataMode(SPI_MODE0);
+    spi_port->setBitOrder(MSBFIRST);
 #endif
     if (digitalRead(interrupt_pin) == 0) {
       status();
@@ -231,8 +235,12 @@ int SIGFOXClass::sendBit(bool value){
 
   if (!debugging) {
 #ifdef SIGFOX_SPI
+    spi_port->end();
     LowPower.attachInterruptWakeup(interrupt_pin, NULL, FALLING);
     LowPower.sleep(timeout);
+    spi_port->begin();
+    spi_port->setDataMode(SPI_MODE0);
+    spi_port->setBitOrder(MSBFIRST);
 #endif
     if (digitalRead(interrupt_pin) == 0) {
       status();
@@ -646,3 +654,4 @@ void SIGFOXClass::end()
 }
 
 SIGFOXClass SigFox; //singleton
+
